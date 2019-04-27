@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+// Route Group for: Non-Versioned API
+Route::middleware(['auth:api'])
+    ->namespace('Api')
+    ->as('api.')
+    ->group(function () {
+
+    // Show the authenticated user
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->name('users.show');
+
+	// CRUD for articles
+    Route::resource('articles', 'ArticlesController', ['only' => ['index', 'show', 'store']]);
 });
